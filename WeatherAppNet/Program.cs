@@ -19,7 +19,7 @@ namespace WeatherAppNet
             }
             else
             {
-                Console.WriteLine("temperatura w tym mieście wynosi: " + DataWeather.Main.Temp + " K");
+                Console.WriteLine("temperatura w tym mieście wynosi: " + Weather.KelvinToCelsius(DataWeather.Main.Temp));
             }
 
         }

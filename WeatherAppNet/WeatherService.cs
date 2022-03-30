@@ -33,10 +33,14 @@ namespace WeatherAppNet
         }
         public string GetWeatherApiUrl(string cityName)
         {
-            string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid="+apikey;
+            string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apikey;
             return response;
+        }
+        public float KelvinToCelsius(float kelvin)
+        {
+            float celsius = (float)(kelvin - 273.15);
+            return celsius;
         }
     }
 }
 
-    
