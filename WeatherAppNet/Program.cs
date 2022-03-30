@@ -1,12 +1,21 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace WeatherAppNet
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            WeatherService Weather = new();
+            PropertisWeatherJson DataWeather = await Weather.GetWeather();
+            Console.WriteLine("temperatura w szczecinie wynosi "+DataWeather.Main.Temp+" K");
         }
+
+
     }
 }
+
