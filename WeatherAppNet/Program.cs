@@ -11,15 +11,18 @@ namespace WeatherAppNet
 
         static async Task Main(string[] args)
         {
-            WeatherService Weather = new();
-            PropertisWeatherJson DataWeather = await Weather.GetWeather(GetCityName());
-            if (DataWeather == null)
+            var szczecinWeatherService = new WeatherService("Szczecin");
+            await szczecinWeatherService.RefreshWeather();
+            var currentWeather = szczecinWeatherService.GetWeather();
+            if (currentWeather == null)
             {
                 Console.WriteLine("kolego takiego miasta nie ma");
             }
             else
             {
-                Console.WriteLine("temperatura w tym mieście wynosi: " + Weather.KelvinToCelsius(DataWeather.Main.Temp));
+                Console.WriteLine("temperatura w tym mieście wynosi: " + szczecinWeatherService.KelvinToCelsius(currentWeather.Main.Temp));
+                Console.WriteLine("wind: "+ currentWeather.Wind.Speed+"\n"+ "chmury: "+ currentWeather.Clouds.All );
+                    
             }
 
         }

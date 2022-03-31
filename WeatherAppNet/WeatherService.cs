@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace WeatherAppNet
 {
-    class WeatherService
+    public class WeatherService
     {
+        private string cityName;
         private string apikey;
-        public WeatherService()
+        
+       private WeatherData weatherData;
+
+        public WeatherService(string cityName)
         {
-            apikey = "946ca6c9efb7e4936218ba5e826f9aab";
+            this.apikey = "946ca6c9efb7e4936218ba5e826f9aab";
+            this.cityName = cityName;
+           
+            this.weatherData = null;
         }
-
-        public async Task<PropertisWeatherJson> GetWeather(string cityName)
+        public async Task RefreshWeather()
         {
-
             HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync(GetWeatherApiUrl(cityName));
-            if (response.StatusCode == HttpStatusCode.OK)
+            HttpResponseMessage contentResponse = await client.GetAsync(GetWeatherApiUrl(cityName));
+            if (contentResponse.StatusCode == HttpStatusCode.OK)
             {
-                HttpContent content = response.Content;
+                HttpContent content = contentResponse.Content;
                 string data = await content.ReadAsStringAsync();
-                PropertisWeatherJson temp = JsonConvert.DeserializeObject<PropertisWeatherJson>(data);
-                return temp;
+                weatherData = JsonConvert.DeserializeObject<WeatherData>(data);
             }
-            return null;
+           
+        }
+        public WeatherData GetWeather()
+        {
+            return weatherData;
+
         }
         public string GetWeatherApiUrl(string cityName)
         {

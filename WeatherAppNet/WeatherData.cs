@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WeatherAppNet
 {
-    class PropertisWeatherJson
+   public class WeatherData
     {
 
         public Coord Coord { get; set; }
