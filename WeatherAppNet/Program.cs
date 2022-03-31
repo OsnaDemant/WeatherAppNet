@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,28 +12,29 @@ namespace WeatherAppNet
 
         static async Task Main(string[] args)
         {
-            var szczecinWeatherService = new WeatherService("Szczecin");
-
-            var currentWeather = await szczecinWeatherService.GetWeather();
-            if (currentWeather == null)
+          //  GetCityName();
+            if (args.Length <= 0)
             {
-                Console.WriteLine("kolego takiego miasta nie ma");
+                Console.WriteLine("nie podałeś nazwy miasta");
             }
             else
             {
-                Console.WriteLine("temperatura w tym mieście wynosi: " + SupportWeatherFunc.KelvinToCelsius(currentWeather.Main.Temp));
-                Console.WriteLine("wind: " + currentWeather.Wind.Speed + "\n" + "chmury: " + currentWeather.Clouds.All);
 
+                var szczecinWeatherService = new WeatherService(args[0]);
+
+                var currentWeather = await szczecinWeatherService.GetWeather();
+                if (currentWeather == null)
+                {
+                    Console.WriteLine("kolego takiego miasta nie ma");
+                }
+                else
+                {
+                    Console.WriteLine("temperatura w tym mieście wynosi: " + SupportWeatherFunc.KelvinToCelsius(currentWeather.Main.Temp));
+                    Console.WriteLine("wind: " + currentWeather.Wind.Speed + "\n" + "chmury: " + currentWeather.Clouds.All + "% zachmurzenia");
+
+                }
             }
-
         }
-        public static string GetCityName()
-        {
-            string CityName;
-            CityName = Console.ReadLine();
-            return CityName;
-        }
-
     }
 }
 
