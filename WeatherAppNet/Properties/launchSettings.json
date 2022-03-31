@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "WeatherAppNet": {
-      "commandName": "Project",
-      "commandLineArgs": "elo siema czesc"
-    }
-  }
-}
