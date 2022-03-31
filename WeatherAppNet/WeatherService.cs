@@ -13,14 +13,14 @@ namespace WeatherAppNet
     {
         private string cityName;
         private string apikey;
-        
-       private WeatherData weatherData;
+
+        private WeatherData weatherData;
 
         public WeatherService(string cityName)
         {
             this.apikey = "946ca6c9efb7e4936218ba5e826f9aab";
             this.cityName = cityName;
-           
+
             this.weatherData = null;
         }
         public async Task RefreshWeather()
@@ -33,10 +33,14 @@ namespace WeatherAppNet
                 string data = await content.ReadAsStringAsync();
                 weatherData = JsonConvert.DeserializeObject<WeatherData>(data);
             }
-           
+
         }
-        public WeatherData GetWeather()
+        public async Task<WeatherData> GetWeather()
         {
+            if (weatherData == null)
+            {
+                await RefreshWeather();
+            }
             return weatherData;
 
         }
@@ -44,11 +48,6 @@ namespace WeatherAppNet
         {
             string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apikey;
             return response;
-        }
-        public float KelvinToCelsius(float kelvin)
-        {
-            float celsius = (float)(kelvin - 273.15);
-            return celsius;
         }
     }
 }
