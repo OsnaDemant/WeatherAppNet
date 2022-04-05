@@ -12,9 +12,7 @@ namespace WeatherAppNet
 {
     public class WeatherService
     {
-        private static string pathToCurrentDirectory = Directory.GetCurrentDirectory();
-        private static string pathToCatalog = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(pathToCurrentDirectory)));
-        private string pathToCurrentDirectoryApiKey = pathToCatalog + "\\Properties\\ApiKey.txt";
+
         private string cityName;
         private string apikey;
 
@@ -22,9 +20,13 @@ namespace WeatherAppNet
 
         public WeatherService(string cityName)
         {
-            this.apikey = ReadApiKeyFromFile();
             this.cityName = cityName;
             this.weatherData = null;
+        }
+
+        public void Initialize()
+        {
+            this.apikey = ReadApiKeyFromFile();
         }
         public async Task RefreshWeather()
         {
@@ -52,14 +54,23 @@ namespace WeatherAppNet
             string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apikey;
             return response;
         }
-        public string ReadApiKeyFromFile()
+        public static string ReadApiKeyFromFile()
         {
-            string text = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
-            return text;
+            string pathToCurrentDirectory = Directory.GetCurrentDirectory();
+            string pathToCatalog = pathToCurrentDirectory;
+            string pathToCurrentDirectoryApiKey = pathToCatalog + "\\ApiKey.txt";
+            string textFile = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
+            return textFile;
+            // what if is null or what if not exists
+            //add path to apikey}
         }
-        
-    
+
+
     }
 }
+
+
+
+
 
 

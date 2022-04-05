@@ -21,6 +21,7 @@ namespace WeatherAppNet
             {
 
                 var szczecinWeatherService = new WeatherService(args[0]);
+                szczecinWeatherService.Initialize();
 
                 var currentWeather = await szczecinWeatherService.GetWeather();
                 if (currentWeather == null)
