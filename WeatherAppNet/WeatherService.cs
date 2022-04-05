@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,6 +12,9 @@ namespace WeatherAppNet
 {
     public class WeatherService
     {
+        private static string pathToCurrentDirectory = Directory.GetCurrentDirectory();
+        private static string pathToCatalog = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(pathToCurrentDirectory)));
+        private string pathToCurrentDirectoryApiKey = pathToCatalog + "\\Properties\\ApiKey.txt";
         private string cityName;
         private string apikey;
 
@@ -18,9 +22,8 @@ namespace WeatherAppNet
 
         public WeatherService(string cityName)
         {
-            this.apikey = "946ca6c9efb7e4936218ba5e826f9aab";
+            this.apikey = ReadApiKeyFromFile();
             this.cityName = cityName;
-
             this.weatherData = null;
         }
         public async Task RefreshWeather()
@@ -49,6 +52,14 @@ namespace WeatherAppNet
             string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apikey;
             return response;
         }
+        public string ReadApiKeyFromFile()
+        {
+            string text = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
+            return text;
+        }
+        
+    
     }
 }
+
 

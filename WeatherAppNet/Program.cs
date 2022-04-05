@@ -25,7 +25,7 @@ namespace WeatherAppNet
                 var currentWeather = await szczecinWeatherService.GetWeather();
                 if (currentWeather == null)
                 {
-                    Console.WriteLine("kolego takiego miasta nie ma");
+                    Console.WriteLine("takiego miasta nie ma");
                 }
                 else
                 {
