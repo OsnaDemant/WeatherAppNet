@@ -12,18 +12,27 @@ namespace WeatherAppNet
 
         static async Task Main(string[] args)
         {
-          //  GetCityName();
+            //  GetCityName();
             if (args.Length <= 0)
             {
                 Console.WriteLine("nie podałeś nazwy miasta");
             }
             else
             {
+                WeatherData currentWeather;
+                try
+                {
+                    var szczecinWeatherService = new WeatherService(args[0]);
+                    szczecinWeatherService.Initialize();
 
-                var szczecinWeatherService = new WeatherService(args[0]);
-                szczecinWeatherService.Initialize();
+                    currentWeather = await szczecinWeatherService.GetWeather();
+                }
+                catch (UnauthorizedException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
 
-                var currentWeather = await szczecinWeatherService.GetWeather();
                 if (currentWeather == null)
                 {
                     Console.WriteLine("takiego miasta nie ma");

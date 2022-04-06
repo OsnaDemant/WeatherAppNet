@@ -27,6 +27,9 @@ namespace WeatherAppNet
         public void Initialize()
         {
             this.apikey = ReadApiKeyFromFile();
+            if (apikey == null) {
+                throw new UnauthorizedException("ApiKey not found.");
+            }
         }
         public async Task RefreshWeather()
         {
@@ -37,6 +40,9 @@ namespace WeatherAppNet
                 HttpContent content = contentResponse.Content;
                 string data = await content.ReadAsStringAsync();
                 weatherData = JsonConvert.DeserializeObject<WeatherData>(data);
+            }
+            else if (contentResponse.StatusCode == HttpStatusCode.Unauthorized) {
+               throw new  UnauthorizedException("Wrong Apikey");
             }
 
         }
@@ -56,11 +62,15 @@ namespace WeatherAppNet
         }
         public static string ReadApiKeyFromFile()
         {
+
             string pathToCurrentDirectory = Directory.GetCurrentDirectory();
-            string pathToCatalog = pathToCurrentDirectory;
-            string pathToCurrentDirectoryApiKey = pathToCatalog + "\\ApiKey.txt";
-            string textFile = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
-            return textFile;
+            string pathToCurrentDirectoryApiKey = Path.Combine(pathToCurrentDirectory, "ApiKey.txt");
+            if (File.Exists(pathToCurrentDirectoryApiKey))
+            {
+                string textFile = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
+                return textFile;
+            }
+            return null;
             // what if is null or what if not exists
             //add path to apikey}
         }
