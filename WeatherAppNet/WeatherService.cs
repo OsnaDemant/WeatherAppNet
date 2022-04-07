@@ -15,13 +15,14 @@ namespace WeatherAppNet
 
         private string cityName;
         private string apikey;
-
+        public enum TemperatureScale { Celsius, fahrenheit }
         private WeatherData weatherData;
 
         public WeatherService(string cityName)
         {
             this.cityName = cityName;
             this.weatherData = null;
+
         }
 
         public void Initialize()
@@ -42,7 +43,7 @@ namespace WeatherAppNet
                 weatherData = JsonConvert.DeserializeObject<WeatherData>(data);
             }
             else if (contentResponse.StatusCode == HttpStatusCode.Unauthorized) {
-               throw new  UnauthorizedException("Wrong Apikey");
+                throw new UnauthorizedException("Wrong Apikey");
             }
 
         }
@@ -74,7 +75,26 @@ namespace WeatherAppNet
             // what if is null or what if not exists
             //add path to apikey}
         }
+        
+        public static float GetTemperature(TemperatureScale temperatureTypeScale, WeatherData WeatherInformation)
+        {
+            {
+                //WeatherData currentWeather = new WeatherData();
+                switch (temperatureTypeScale)
+                {
+                    case TemperatureScale.Celsius:
+                        return SupportWeatherFunc.KelvinToCelsius(WeatherInformation.Main.Temp);
+                     
+                    case TemperatureScale.fahrenheit:
+                        return WeatherInformation.Main.Temp;
 
+                    default:
+                        throw new UnauthorizedException("Invalid Temperature Scale");
+                }
+            }
+
+
+        }
 
     }
 }
