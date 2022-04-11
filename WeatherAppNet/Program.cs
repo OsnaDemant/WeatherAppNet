@@ -17,16 +17,22 @@ namespace WeatherAppNet
             //jesli jeden argument podaj w farenhaitach
             // /c w celciuszach
             //  GetCityName();
+            
+
+
             if (args.Length <= 0)
             {
                 Console.WriteLine("nie podałeś nazwy miasta");
             }
             else
             {
+                var szczecinWeatherService = new WeatherService(args[0]);
                 WeatherData currentWeather;
+
+
                 try
                 {
-                    var szczecinWeatherService = new WeatherService(args[0]);
+                    
                     szczecinWeatherService.Initialize();
 
                     currentWeather = await szczecinWeatherService.GetWeather();
@@ -44,7 +50,7 @@ namespace WeatherAppNet
                 else
                 {
 
-                    Console.WriteLine("temperatura w tym mieście wynosi: " + WeatherService.GetTemperature(TemperatureScale.Celsius,currentWeather));
+                    Console.WriteLine("temperatura w tym mieście wynosi: " + szczecinWeatherService.GetTemperature(szczecinWeatherService.SetTypeScaleForTemperature(args)));
                     Console.WriteLine("wind: " + currentWeather.Wind.Speed + "\n" + "chmury: " + currentWeather.Clouds.All + "% zachmurzenia");
 
                 }

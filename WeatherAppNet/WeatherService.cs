@@ -17,6 +17,7 @@ namespace WeatherAppNet
         private string apikey;
         public enum TemperatureScale { Celsius, fahrenheit }
         private WeatherData weatherData;
+        
 
         public WeatherService(string cityName)
         {
@@ -28,7 +29,8 @@ namespace WeatherAppNet
         public void Initialize()
         {
             this.apikey = ReadApiKeyFromFile();
-            if (apikey == null) {
+            if (apikey == null)
+            {
                 throw new UnauthorizedException("ApiKey not found.");
             }
         }
@@ -42,7 +44,8 @@ namespace WeatherAppNet
                 string data = await content.ReadAsStringAsync();
                 weatherData = JsonConvert.DeserializeObject<WeatherData>(data);
             }
-            else if (contentResponse.StatusCode == HttpStatusCode.Unauthorized) {
+            else if (contentResponse.StatusCode == HttpStatusCode.Unauthorized)
+            {
                 throw new UnauthorizedException("Wrong Apikey");
             }
 
@@ -75,25 +78,47 @@ namespace WeatherAppNet
             // what if is null or what if not exists
             //add path to apikey}
         }
-        
-        public static float GetTemperature(TemperatureScale temperatureTypeScale, WeatherData WeatherInformation)
+
+        public float GetTemperature(TemperatureScale temperatureTypeScale)
         {
             {
                 //WeatherData currentWeather = new WeatherData();
                 switch (temperatureTypeScale)
                 {
                     case TemperatureScale.Celsius:
-                        return SupportWeatherFunc.KelvinToCelsius(WeatherInformation.Main.Temp);
-                     
+                        return SupportWeatherFunc.KelvinToCelsius(weatherData.Main.Temp);
+
                     case TemperatureScale.fahrenheit:
-                        return WeatherInformation.Main.Temp;
+                        return weatherData.Main.Temp;
 
                     default:
-                        throw new UnauthorizedException("Invalid Temperature Scale");
+                        throw new NotImplementedException("Invalid Temperature Scale");
                 }
             }
 
 
+        }
+        public TemperatureScale SetTypeScaleForTemperature(string[] args)
+        {
+            TemperatureScale ScaleTemperature;
+            foreach (string arg in args)
+            {
+                
+                switch (arg.Substring(0, 2).ToUpper())
+                {
+                    case "/F":
+                        ScaleTemperature = TemperatureScale.fahrenheit;
+                        return ScaleTemperature;
+
+                    case "/C":
+                        ScaleTemperature = TemperatureScale.Celsius;
+                        return ScaleTemperature;    
+
+                }
+               
+            }
+            ScaleTemperature = TemperatureScale.fahrenheit;
+            return ScaleTemperature;
         }
 
     }
