@@ -8,53 +8,80 @@ using static WeatherAppNet.WeatherService;
 
 namespace WeatherAppNet
 {
-    class Program 
+    class Program
     {
+       // public string CityName { get; private set; }
+       // public TemperatureScale TemperatureScaleType { get; private set; }
+
+        // private string cityName;
+        // private TemperatureScale temperatureScaleType;
 
         static async Task Main(string[] args)
-        {
-            //jesli nie poda argumentu to zwroci instrukcje jak uzywac programu
-            //jesli jeden argument podaj w farenhaitach
-            // /c w celciuszach
-            //  GetCityName();
-            
-
-
-            if (args.Length <= 0)
+        { 
+            ProgramSettings programSettings = ParseArguments(args);
+            if (programSettings == null)
             {
-                Console.WriteLine("nie podałeś nazwy miasta");
+                return;
+            }
+            var cityWeatherService = new WeatherService(programSettings.CityName);
+            WeatherData currentWeather;
+
+            try
+            {
+                cityWeatherService.Initialize();
+                currentWeather = await cityWeatherService.GetWeather();
+            }
+            catch (UnauthorizedException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
+
+            if (currentWeather == null)
+            {
+                Console.WriteLine("takiego miasta nie ma");
             }
             else
             {
-                var szczecinWeatherService = new WeatherService(args[0]);
-                WeatherData currentWeather;
-
-
-                try
-                {
-                    
-                    szczecinWeatherService.Initialize();
-
-                    currentWeather = await szczecinWeatherService.GetWeather();
-                }
-                catch (UnauthorizedException e)
-                {
-                    Console.WriteLine(e.Message);
-                    return;
-                }
-
-                if (currentWeather == null)
-                {
-                    Console.WriteLine("takiego miasta nie ma");
-                }
-                else
-                {
-
-                    Console.WriteLine("temperatura w tym mieście wynosi: " + szczecinWeatherService.GetTemperature(szczecinWeatherService.SetTypeScaleForTemperature(args)));
-                    Console.WriteLine("wind: " + currentWeather.Wind.Speed + "\n" + "chmury: " + currentWeather.Clouds.All + "% zachmurzenia");
-
-                }
+                Console.WriteLine("temperatura w tym mieście wynosi: " + cityWeatherService.GetTemperature(programSettings.TemperatureScaleType));
+                Console.WriteLine("wind: " + currentWeather.Wind.Speed + "\n" + "chmury: " + currentWeather.Clouds.All + "% zachmurzenia");
             }
+        }
+
+        static public TemperatureScale GetTypeScaleForTemperature(string arg)
+        {
+            TemperatureScale scaleTemperature = TemperatureScale.Fahrenheit;
+
+            switch (arg.Substring(0, 2).ToUpper())
+            {
+                case "/F":
+                    scaleTemperature = TemperatureScale.Fahrenheit;
+                    break;
+
+                case "/C":
+                    scaleTemperature = TemperatureScale.Celsius;
+                    break;
+            }
+            return scaleTemperature;
+        }
+
+        static ProgramSettings ParseArguments(string[] args)
+        {
+            
+            if (args.Length <= 0)
+            {
+                Console.WriteLine("Proszę podać nazwę miasta jako pierwsz argument. Program domyślnie oblicza Fahrenhaity można ustawić celciusze dodając jako drugi argument po mieście /C");
+                return null;
+            }
+            else if (args.Length == 1)
+            {
+               return new ProgramSettings(args[0]);
+            }
+            else if (args.Length == 2)
+            {
+                return new ProgramSettings(args[0], GetTypeScaleForTemperature(args[1]));
+            }
+            return null;
         }
     }
 }

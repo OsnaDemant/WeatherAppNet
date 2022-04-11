@@ -15,9 +15,9 @@ namespace WeatherAppNet
 
         private string cityName;
         private string apikey;
-        public enum TemperatureScale { Celsius, fahrenheit }
+        public enum TemperatureScale { Celsius, Fahrenheit }
         private WeatherData weatherData;
-        
+
 
         public WeatherService(string cityName)
         {
@@ -88,7 +88,7 @@ namespace WeatherAppNet
                     case TemperatureScale.Celsius:
                         return SupportWeatherFunc.KelvinToCelsius(weatherData.Main.Temp);
 
-                    case TemperatureScale.fahrenheit:
+                    case TemperatureScale.Fahrenheit:
                         return weatherData.Main.Temp;
 
                     default:
@@ -98,28 +98,7 @@ namespace WeatherAppNet
 
 
         }
-        public TemperatureScale SetTypeScaleForTemperature(string[] args)
-        {
-            TemperatureScale ScaleTemperature;
-            foreach (string arg in args)
-            {
-                
-                switch (arg.Substring(0, 2).ToUpper())
-                {
-                    case "/F":
-                        ScaleTemperature = TemperatureScale.fahrenheit;
-                        return ScaleTemperature;
-
-                    case "/C":
-                        ScaleTemperature = TemperatureScale.Celsius;
-                        return ScaleTemperature;    
-
-                }
-               
-            }
-            ScaleTemperature = TemperatureScale.fahrenheit;
-            return ScaleTemperature;
-        }
+       
 
     }
 }
