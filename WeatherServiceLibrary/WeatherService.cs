@@ -7,15 +7,16 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using WeatherServiceLibrary.Common;
+using WeatherServiceLibrary.Exceptions;
 
-namespace WeatherAppNet
+namespace WeatherServiceLibrary
 {
     public class WeatherService
     {
 
         private string cityName;
         private string apikey;
-        public enum TemperatureScale { Celsius, Fahrenheit }
         private WeatherData weatherData;
 
 
@@ -75,30 +76,19 @@ namespace WeatherAppNet
                 return textFile;
             }
             return null;
-            // what if is null or what if not exists
-            //add path to apikey}
         }
 
         public float GetTemperature(TemperatureScale temperatureTypeScale)
         {
+
+            return temperatureTypeScale switch
             {
-                //WeatherData currentWeather = new WeatherData();
-                switch (temperatureTypeScale)
-                {
-                    case TemperatureScale.Celsius:
-                        return SupportWeatherFunc.KelvinToCelsius(weatherData.Main.Temp);
-
-                    case TemperatureScale.Fahrenheit:
-                        return weatherData.Main.Temp;
-
-                    default:
-                        throw new NotImplementedException("Invalid Temperature Scale");
-                }
-            }
-
-
+                TemperatureScale.Celsius => WeatherHelper.KelvinToCelsius(weatherData.Main.Temp),
+                TemperatureScale.Fahrenheit => weatherData.Main.Temp,
+                _ => throw new NotImplementedException("Invalid Temperature Scale"),
+            };
         }
-       
+
 
     }
 }

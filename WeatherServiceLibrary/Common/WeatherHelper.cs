@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeatherAppNet
+namespace WeatherServiceLibrary.Common
 {
-    public static class SupportWeatherFunc
+    public static class WeatherHelper
     {
         public static float KelvinToCelsius(float kelvin)
         {

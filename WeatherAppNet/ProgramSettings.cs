@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static WeatherAppNet.WeatherService;
+using WeatherServiceLibrary.Common;
 
 namespace WeatherAppNet
 {
@@ -16,11 +16,10 @@ namespace WeatherAppNet
         {
             this.CityName = cityName;
             this.TemperatureScaleType = temperatureScaleType;
-
         }
-       public ProgramSettings(string cityName): this(cityName,TemperatureScale.Fahrenheit)
+        public ProgramSettings(string cityName) : this(cityName, TemperatureScale.Fahrenheit)
         {
-            
+
         }
     }
 }
