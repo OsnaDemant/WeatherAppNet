@@ -14,17 +14,14 @@ namespace WeatherServiceLibrary
 {
     public class WeatherService
     {
-
         private string cityName;
         private string apikey;
         private WeatherData weatherData;
-
 
         public WeatherService(string cityName)
         {
             this.cityName = cityName;
             this.weatherData = null;
-
         }
 
         public void Initialize()
@@ -49,7 +46,6 @@ namespace WeatherServiceLibrary
             {
                 throw new UnauthorizedException("Wrong Apikey");
             }
-
         }
         public async Task<WeatherData> GetWeather()
         {
@@ -67,7 +63,6 @@ namespace WeatherServiceLibrary
         }
         public static string ReadApiKeyFromFile()
         {
-
             string pathToCurrentDirectory = Directory.GetCurrentDirectory();
             string pathToCurrentDirectoryApiKey = Path.Combine(pathToCurrentDirectory, "ApiKey.txt");
             if (File.Exists(pathToCurrentDirectoryApiKey))
@@ -80,7 +75,6 @@ namespace WeatherServiceLibrary
 
         public float GetTemperature(TemperatureScale temperatureTypeScale)
         {
-
             return temperatureTypeScale switch
             {
                 TemperatureScale.Celsius => WeatherHelper.KelvinToCelsius(weatherData.Main.Temp),
@@ -88,8 +82,6 @@ namespace WeatherServiceLibrary
                 _ => throw new NotImplementedException("Invalid Temperature Scale"),
             };
         }
-
-
     }
 }
 
