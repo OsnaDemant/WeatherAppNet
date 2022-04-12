@@ -12,11 +12,6 @@ namespace WeatherAppNet
 {
     class Program
     {
-       // public string CityName { get; private set; }
-       // public TemperatureScale TemperatureScaleType { get; private set; }
-
-        // private string cityName;
-        // private TemperatureScale temperatureScaleType;
 
         static async Task Main(string[] args)
         { 
@@ -45,8 +40,9 @@ namespace WeatherAppNet
             }
             else
             {
-                Console.WriteLine("temperatura w tym mieście wynosi: " + cityWeatherService.GetTemperature(programSettings.TemperatureScaleType));
-                Console.WriteLine("wind: " + currentWeather.Wind.Speed + "\n" + "chmury: " + currentWeather.Clouds.All + "% zachmurzenia");
+                Console.WriteLine("Weather in: " + programSettings.CityName + "\n" + "Temperature: " + cityWeatherService.GetTemperature(programSettings.TemperatureScaleType));
+                Console.WriteLine("Wind: " + currentWeather.Wind.Speed + " meter/sec" + "\n" + "Clouds: " + currentWeather.Clouds.All + " %");
+                Console.WriteLine("Humidity: " + currentWeather.Main.Humidity + " %" + "\n" + "Visibility: " + currentWeather.Visibility + " meter");
             }
         }
 
