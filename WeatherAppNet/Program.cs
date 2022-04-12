@@ -12,7 +12,6 @@ namespace WeatherAppNet
 {
     class Program
     {
-
         static async Task Main(string[] args)
         { 
             ProgramSettings programSettings = ParseArguments(args);
