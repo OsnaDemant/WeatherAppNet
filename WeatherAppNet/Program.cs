@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WeatherServiceLibrary;
 using WeatherServiceLibrary.Common;
 using WeatherServiceLibrary.Exceptions;
+using WeatherServiceLibrary.Database;
 
 namespace WeatherAppNet
 {
@@ -21,10 +22,11 @@ namespace WeatherAppNet
             }
             var cityWeatherService = new WeatherService(programSettings.CityName);
             WeatherData currentWeather;
-
+            DataBaseFunction.AddData();
             try
             {
                 cityWeatherService.Initialize();
+                
                 currentWeather = await cityWeatherService.GetWeather();
             }
             catch (UnauthorizedException e)
@@ -35,7 +37,7 @@ namespace WeatherAppNet
 
             if (currentWeather == null)
             {
-                Console.WriteLine("takiego miasta nie ma");
+                Console.WriteLine("This city dont exist");
             }
             else
             {
@@ -80,6 +82,7 @@ namespace WeatherAppNet
             }
             return null;
         }
+        
     }
 }
 

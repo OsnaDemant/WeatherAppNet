@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +30,16 @@ namespace WeatherServiceLibrary
 
     public class Coord
     {
+       
+        public int Id { get; set; }
         public float Lon { get; set; }
         public float Lat { get; set; }
     }
 
     public class Main
     {
+        [JsonIgnore]
+        public int Id { get; set; }
         public float Temp { get; set; }
         public float Feels_like { get; set; }
         public float Temp_min { get; set; }
@@ -43,12 +50,16 @@ namespace WeatherServiceLibrary
 
     public class Wind
     {
+        [JsonIgnore]
+        public int Id { get; set; }
         public float Speed { get; set; }
         public int Deg { get; set; }
     }
-
+ 
     public class Clouds
     {
+        [JsonIgnore]
+        public int Id { get; set; }
         public int All { get; set; }
     }
 
