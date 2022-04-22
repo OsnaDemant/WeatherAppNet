@@ -8,6 +8,7 @@ using WeatherServiceLibrary;
 using WeatherServiceLibrary.Common;
 using WeatherServiceLibrary.Exceptions;
 using WeatherServiceLibrary.Database;
+using WeatherServiceLibrary.Entities;
 
 namespace WeatherAppNet
 {
@@ -20,14 +21,14 @@ namespace WeatherAppNet
             {
                 return;
             }
-            var cityWeatherService = new WeatherService(programSettings.CityName);
+            var cityWeatherService = new WeatherService();
             WeatherData currentWeather;
-            DataBaseFunction.AddData();
+           // DataBaseFunction.AddData();
             try
             {
                 cityWeatherService.Initialize();
                 
-                currentWeather = await cityWeatherService.GetWeather();
+                currentWeather = await cityWeatherService.GetWeather(programSettings.CityName);
             }
             catch (UnauthorizedException e)
             {
@@ -41,7 +42,7 @@ namespace WeatherAppNet
             }
             else
             {
-                Console.WriteLine("Weather in: " + programSettings.CityName + "\n" + "Temperature: " + cityWeatherService.GetTemperature(programSettings.TemperatureScaleType));
+                Console.WriteLine("Weather in: " + programSettings.CityName + "\n" + "Temperature: " + currentWeather.GetTemperature(programSettings.TemperatureScaleType));
                 Console.WriteLine("Wind: " + currentWeather.Wind.Speed + " meter/sec" + "\n" + "Clouds: " + currentWeather.Clouds.All + " %");
                 Console.WriteLine("Humidity: " + currentWeather.Main.Humidity + " %" + "\n" + "Visibility: " + currentWeather.Visibility + " meter");
             }

@@ -8,20 +8,21 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherServiceLibrary.Common;
+using WeatherServiceLibrary.Database;
+using WeatherServiceLibrary.Entities;
 using WeatherServiceLibrary.Exceptions;
 
 namespace WeatherServiceLibrary
 {
     public class WeatherService
     {
-        private string cityName;
+       
         private string apikey;
-        private WeatherData weatherData;
+        private WeatherDataRepository weatherDataRepository;
 
-        public WeatherService(string cityName)
+        public WeatherService()
         {
-            this.cityName = cityName;
-            this.weatherData = null;
+            this.weatherDataRepository = new WeatherDataRepository();
         }
 
         public void Initialize()
@@ -32,29 +33,42 @@ namespace WeatherServiceLibrary
                 throw new UnauthorizedException("ApiKey not found.");
             }
         }
-        public async Task RefreshWeather()
+        public async Task<WeatherDataQuery> RefreshWeather(string cityName)
         {
             HttpClient client = new();
             HttpResponseMessage contentResponse = await client.GetAsync(GetWeatherApiUrl(cityName));
             if (contentResponse.StatusCode == HttpStatusCode.OK)
             {
+                WeatherDataQuery query = new WeatherDataQuery();
                 HttpContent content = contentResponse.Content;
                 string data = await content.ReadAsStringAsync();
-                weatherData = JsonConvert.DeserializeObject<WeatherData>(data);
+                query.CityName = cityName;
+                query.Time = DateTime.Now;
+                query.WeatherData = JsonConvert.DeserializeObject<WeatherData>(data);
+                weatherDataRepository.AddData(query);
+                return query;
             }
             else if (contentResponse.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new UnauthorizedException("Wrong Apikey");
             }
+            throw new ApplicationException("unnown error retriving data");
         }
-        public async Task<WeatherData> GetWeather()
+        public async Task<WeatherData> GetWeather(string cityName)
         {
-            if (weatherData == null)
-            {
-                await RefreshWeather();
-            }
-            return weatherData;
+             
+        DateTime timeNow = DateTime.UtcNow;
+            TimeSpan oneHour = new TimeSpan(1, 0, 0);
+            var listOfAllElementsInRepo = weatherDataRepository.GetAll();
+            var lessThenOneHourElements = listOfAllElementsInRepo.Where(x => x.Time >= (timeNow - oneHour)).ToList();
 
+            var newestItem = lessThenOneHourElements.OrderByDescending(x => x.Time).ToList().FirstOrDefault();
+
+            if (newestItem == null)
+            {
+                newestItem = await RefreshWeather(cityName);
+            }
+            return newestItem.WeatherData;
         }
         public string GetWeatherApiUrl(string cityName)
         {
@@ -73,15 +87,6 @@ namespace WeatherServiceLibrary
             return null;
         }
 
-        public float GetTemperature(TemperatureScale temperatureTypeScale)
-        {
-            return temperatureTypeScale switch
-            {
-                TemperatureScale.Celsius => WeatherHelper.KelvinToCelsius(weatherData.Main.Temp),
-                TemperatureScale.Fahrenheit => weatherData.Main.Temp,
-                _ => throw new NotImplementedException("Invalid Temperature Scale"),
-            };
-        }
     }
 }
 
