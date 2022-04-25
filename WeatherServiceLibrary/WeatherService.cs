@@ -19,6 +19,7 @@ namespace WeatherServiceLibrary
        
         private string apikey;
         private WeatherDataRepository weatherDataRepository;
+        
 
         public WeatherService()
         {
@@ -56,14 +57,13 @@ namespace WeatherServiceLibrary
         }
         public async Task<WeatherData> GetWeather(string cityName)
         {
-             
-        DateTime timeNow = DateTime.UtcNow;
+            cityName = cityName.ToLower();
+            DateTime timeNow = DateTime.UtcNow;
             TimeSpan oneHour = new TimeSpan(1, 0, 0);
             var listOfAllElementsInRepo = weatherDataRepository.GetAll();
-            var lessThenOneHourElements = listOfAllElementsInRepo.Where(x => x.Time >= (timeNow - oneHour)).ToList();
-
-            var newestItem = lessThenOneHourElements.OrderByDescending(x => x.Time).ToList().FirstOrDefault();
-
+             var lessThenOneHourElements = listOfAllElementsInRepo.Where(x => x.Time >= (timeNow - oneHour) && x.CityName == cityName);
+            var newestItem = lessThenOneHourElements.OrderByDescending(x => x.Time).FirstOrDefault();
+            
             if (newestItem == null)
             {
                 newestItem = await RefreshWeather(cityName);

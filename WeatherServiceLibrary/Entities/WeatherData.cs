@@ -76,6 +76,8 @@ public class Clouds
 
 public class Sys
 {
+    [JsonIgnore]
+    public int DataBaseId { get; set; }
     public int Type { get; set; }
     public int Id { get; set; }
     public string Country { get; set; }

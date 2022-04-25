@@ -16,9 +16,17 @@ namespace WeatherServiceLibrary.Database
 
             context = new WeatherContext();
         }
-        public List<WeatherDataQuery> GetAll()
+        public IQueryable<WeatherDataQuery> GetAll()
         {
-            return context.WeatherDataQuerys.ToList();
+            return context.WeatherDataQuerys
+                .Include(x => x.WeatherData)
+                .Include(x => x.WeatherData.Wind)
+                .Include(x => x.WeatherData.Clouds)
+                .Include(x => x.WeatherData.Coord)
+                .Include(x => x.WeatherData.Main)
+                .Include(x => x.WeatherData.Sys);
+               // .Include(x => x.CityName);
+                
         }
 
         public WeatherDataQuery AddData(WeatherDataQuery entity)

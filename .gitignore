@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /WeatherAppNet/Properties/
 /WeatherAppNet/ApiKey.txt
+/WeatherServiceLibrary/Database.db

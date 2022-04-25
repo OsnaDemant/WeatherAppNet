@@ -14,19 +14,19 @@ namespace WeatherServiceLibrary.Database
     
     public class WeatherContext : DbContext
     {
-        
+      
         public DbSet<WeatherDataQuery> WeatherDataQuerys { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase("DataBase");
+            optionsBuilder.UseSqlite("Data Source=Database.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var converter = new ValueConverter<Weather[], string>(
-                v => string.Join(";", JsonConvert.SerializeObject(v)),
-                v => v.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(val => JsonConvert.DeserializeObject<Weather>(val)).ToArray());
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Weather[]>(v));
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<WeatherDataQuery>()
@@ -38,6 +38,9 @@ namespace WeatherServiceLibrary.Database
             modelBuilder.Entity<WeatherData>()
                 .Property(e => e.Weather)
                 .HasConversion(converter);
+
+            modelBuilder.Entity<Sys>()
+                .HasKey(x => x.DataBaseId);
         }
     }
 }
