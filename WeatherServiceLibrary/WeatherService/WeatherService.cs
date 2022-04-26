@@ -12,6 +12,7 @@ using WeatherServiceLibrary.Database;
 using WeatherServiceLibrary.Entities;
 using WeatherServiceLibrary.Exceptions;
 
+
 namespace WeatherServiceLibrary
 {
     public class WeatherService
@@ -55,7 +56,7 @@ namespace WeatherServiceLibrary
             }
             throw new ApplicationException("unnown error retriving data");
         }
-        public async Task<WeatherData> GetWeather(string cityName)
+        public async Task<WeatherData> GetWeather(string cityName,bool RetriveData)
         {
             cityName = cityName.ToLower();
             DateTime timeNow = DateTime.UtcNow;
@@ -64,7 +65,7 @@ namespace WeatherServiceLibrary
              var lessThenOneHourElements = listOfAllElementsInRepo.Where(x => x.Time >= (timeNow - oneHour) && x.CityName == cityName);
             var newestItem = lessThenOneHourElements.OrderByDescending(x => x.Time).FirstOrDefault();
             
-            if (newestItem == null)
+            if (newestItem == null || RetriveData == true)
             {
                 newestItem = await RefreshWeather(cityName);
             }

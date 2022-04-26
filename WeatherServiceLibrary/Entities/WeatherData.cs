@@ -22,7 +22,8 @@ public class WeatherData
             _ => throw new NotImplementedException("Invalid Temperature Scale"),
         };
     }
-
+    [JsonIgnore]
+    public int IdWeatherData { get; set; }
     public Coord Coord { get; set; }
     public Weather[] Weather { get; set; }
     public string _base { get; set; }

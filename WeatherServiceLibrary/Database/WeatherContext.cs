@@ -41,6 +41,7 @@ namespace WeatherServiceLibrary.Database
 
             modelBuilder.Entity<Sys>()
                 .HasKey(x => x.DataBaseId);
+            modelBuilder.Entity<WeatherData>().HasKey(x => x.IdWeatherData);
         }
     }
 }

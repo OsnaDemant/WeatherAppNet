@@ -11,15 +11,13 @@ namespace WeatherAppNet
     {
         public string CityName { get; private set; }
         public TemperatureScale TemperatureScaleType { get; private set; }
+        public bool Retrive { get; private set; }
 
-        public ProgramSettings(string cityName, TemperatureScale temperatureScaleType)
+        public ProgramSettings(string cityName, TemperatureScale temperatureScale = TemperatureScale.Fahrenheit, bool retrive = false)
         {
             this.CityName = cityName;
-            this.TemperatureScaleType = temperatureScaleType;
-        }
-        public ProgramSettings(string cityName) : this(cityName, TemperatureScale.Fahrenheit)
-        {
-
+            this.TemperatureScaleType = temperatureScale;
+            this.Retrive = retrive;
         }
     }
 }

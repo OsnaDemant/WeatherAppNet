@@ -105,7 +105,7 @@ namespace WeatherServiceLibrary.Migrations
 
             modelBuilder.Entity("WeatherServiceLibrary.Entities.WeatherData", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdWeatherData")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -119,6 +119,9 @@ namespace WeatherServiceLibrary.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Dt")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("MainId")
@@ -145,7 +148,7 @@ namespace WeatherServiceLibrary.Migrations
                     b.Property<string>("_base")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdWeatherData");
 
                     b.HasIndex("CloudsId");
 
@@ -172,12 +175,12 @@ namespace WeatherServiceLibrary.Migrations
                     b.Property<DateTime>("Time")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("WeatherDataId")
+                    b.Property<int?>("WeatherDataIdWeatherData")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WeatherDataId");
+                    b.HasIndex("WeatherDataIdWeatherData");
 
                     b.ToTable("WeatherDataQuerys");
                 });
@@ -236,7 +239,7 @@ namespace WeatherServiceLibrary.Migrations
                 {
                     b.HasOne("WeatherServiceLibrary.Entities.WeatherData", "WeatherData")
                         .WithMany()
-                        .HasForeignKey("WeatherDataId");
+                        .HasForeignKey("WeatherDataIdWeatherData");
 
                     b.Navigation("WeatherData");
                 });

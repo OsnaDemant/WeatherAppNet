@@ -89,7 +89,7 @@ namespace WeatherServiceLibrary.Migrations
                 name: "WeatherData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    IdWeatherData = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CoordId = table.Column<int>(type: "INTEGER", nullable: true),
                     Weather = table.Column<string>(type: "TEXT", nullable: true),
@@ -101,12 +101,13 @@ namespace WeatherServiceLibrary.Migrations
                     Dt = table.Column<int>(type: "INTEGER", nullable: false),
                     SysDataBaseId = table.Column<int>(type: "INTEGER", nullable: true),
                     Timezone = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Cod = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeatherData", x => x.Id);
+                    table.PrimaryKey("PK_WeatherData", x => x.IdWeatherData);
                     table.ForeignKey(
                         name: "FK_WeatherData_Clouds_CloudsId",
                         column: x => x.CloudsId,
@@ -140,7 +141,7 @@ namespace WeatherServiceLibrary.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    WeatherDataId = table.Column<int>(type: "INTEGER", nullable: true),
+                    WeatherDataIdWeatherData = table.Column<int>(type: "INTEGER", nullable: true),
                     CityName = table.Column<string>(type: "TEXT", nullable: true),
                     Time = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -148,10 +149,10 @@ namespace WeatherServiceLibrary.Migrations
                 {
                     table.PrimaryKey("PK_WeatherDataQuerys", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WeatherDataQuerys_WeatherData_WeatherDataId",
-                        column: x => x.WeatherDataId,
+                        name: "FK_WeatherDataQuerys_WeatherData_WeatherDataIdWeatherData",
+                        column: x => x.WeatherDataIdWeatherData,
                         principalTable: "WeatherData",
-                        principalColumn: "Id");
+                        principalColumn: "IdWeatherData");
                 });
 
             migrationBuilder.CreateIndex(
@@ -180,9 +181,9 @@ namespace WeatherServiceLibrary.Migrations
                 column: "WindId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WeatherDataQuerys_WeatherDataId",
+                name: "IX_WeatherDataQuerys_WeatherDataIdWeatherData",
                 table: "WeatherDataQuerys",
-                column: "WeatherDataId");
+                column: "WeatherDataIdWeatherData");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
