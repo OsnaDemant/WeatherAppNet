@@ -25,8 +25,6 @@ namespace WeatherServiceLibrary.Database
                 .Include(x => x.WeatherData.Coord)
                 .Include(x => x.WeatherData.Main)
                 .Include(x => x.WeatherData.Sys);
-               // .Include(x => x.CityName);
-                
         }
 
         public WeatherDataQuery AddData(WeatherDataQuery entity)
@@ -35,8 +33,5 @@ namespace WeatherServiceLibrary.Database
             context.SaveChanges();
             return entity;
         }
-
-
     }
-
 }

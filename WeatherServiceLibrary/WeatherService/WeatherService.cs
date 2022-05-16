@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,19 +18,20 @@ namespace WeatherServiceLibrary
 {
     public class WeatherService
     {
-       
+
         private string apikey;
         private WeatherDataRepository weatherDataRepository;
-        
+      
 
         public WeatherService()
         {
             this.weatherDataRepository = new WeatherDataRepository();
+          
         }
 
-        public void Initialize()
+        public void Initialize(string apiKey)
         {
-            this.apikey = ReadApiKeyFromFile();
+            this.apikey = apiKey;
             if (apikey == null)
             {
                 throw new UnauthorizedException("ApiKey not found.");
@@ -41,7 +43,7 @@ namespace WeatherServiceLibrary
             HttpResponseMessage contentResponse = await client.GetAsync(GetWeatherApiUrl(cityName));
             if (contentResponse.StatusCode == HttpStatusCode.OK)
             {
-                WeatherDataQuery query = new WeatherDataQuery();
+                WeatherDataQuery query = new WeatherDataQuery();    
                 HttpContent content = contentResponse.Content;
                 string data = await content.ReadAsStringAsync();
                 query.CityName = cityName;
@@ -56,16 +58,16 @@ namespace WeatherServiceLibrary
             }
             throw new ApplicationException("unnown error retriving data");
         }
-        public async Task<WeatherData> GetWeather(string cityName,bool RetriveData)
+        public async Task<WeatherData> GetWeather(string cityName, bool refreshData)
         {
             cityName = cityName.ToLower();
             DateTime timeNow = DateTime.UtcNow;
             TimeSpan oneHour = new TimeSpan(1, 0, 0);
             var listOfAllElementsInRepo = weatherDataRepository.GetAll();
-             var lessThenOneHourElements = listOfAllElementsInRepo.Where(x => x.Time >= (timeNow - oneHour) && x.CityName == cityName);
+            var lessThenOneHourElements = listOfAllElementsInRepo.Where(x => x.Time >= (timeNow - oneHour) && x.CityName == cityName);
             var newestItem = lessThenOneHourElements.OrderByDescending(x => x.Time).FirstOrDefault();
-            
-            if (newestItem == null || RetriveData == true)
+
+            if (newestItem == null || refreshData == true)
             {
                 newestItem = await RefreshWeather(cityName);
             }
@@ -76,18 +78,12 @@ namespace WeatherServiceLibrary
             string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apikey;
             return response;
         }
-        public static string ReadApiKeyFromFile()
+        public IEnumerable<WeatherDataQuery> GetCacheData()
         {
-            string pathToCurrentDirectory = Directory.GetCurrentDirectory();
-            string pathToCurrentDirectoryApiKey = Path.Combine(pathToCurrentDirectory, "ApiKey.txt");
-            if (File.Exists(pathToCurrentDirectoryApiKey))
-            {
-                string textFile = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
-                return textFile;
-            }
-            return null;
-        }
+           var listOfAllElementsInRepo = weatherDataRepository.GetAll();
+                return listOfAllElementsInRepo.AsEnumerable();
 
+        }
     }
 }
 

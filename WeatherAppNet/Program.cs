@@ -9,7 +9,7 @@ using WeatherServiceLibrary.Common;
 using WeatherServiceLibrary.Exceptions;
 using WeatherServiceLibrary.Database;
 using WeatherServiceLibrary.Entities;
-
+using System.IO;
 
 namespace WeatherAppNet
 {
@@ -27,8 +27,8 @@ namespace WeatherAppNet
             // DataBaseFunction.AddData();
             try
             {
-                cityWeatherService.Initialize();
-
+                var apiKey = ReadApiKeyFromFile();
+                cityWeatherService.Initialize(apiKey);
 
                 currentWeather = await cityWeatherService.GetWeather(programSettings.CityName, programSettings.Retrive);
             }
@@ -95,12 +95,20 @@ namespace WeatherAppNet
             {
                 case "/R":
                     return true;
-               
             }
             return false;
-
         }
-
+        public static string ReadApiKeyFromFile()
+        {
+            string pathToCurrentDirectory = Directory.GetCurrentDirectory();
+            string pathToCurrentDirectoryApiKey = Path.Combine(pathToCurrentDirectory, "ApiKey.txt");
+            if (File.Exists(pathToCurrentDirectoryApiKey))
+            {
+                string textFile = System.IO.File.ReadAllText(pathToCurrentDirectoryApiKey);
+                return textFile;
+            }
+            return null;
+        }
     }
 }
 
