@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,34 +17,26 @@ using WeatherServiceLibrary.Exceptions;
 
 namespace WeatherServiceLibrary
 {
-    public class WeatherService
+    public class WeatherService : IWeatherService
     {
 
         private string apikey;
         private WeatherDataRepository weatherDataRepository;
-      
 
-        public WeatherService()
+
+        public WeatherService(IConfiguration config)
         {
             this.weatherDataRepository = new WeatherDataRepository();
-          
+            this.apikey = config["ApiKey"];
         }
 
-        public void Initialize(string apiKey)
-        {
-            this.apikey = apiKey;
-            if (apikey == null)
-            {
-                throw new UnauthorizedException("ApiKey not found.");
-            }
-        }
         public async Task<WeatherDataQuery> RefreshWeather(string cityName)
         {
             HttpClient client = new();
             HttpResponseMessage contentResponse = await client.GetAsync(GetWeatherApiUrl(cityName));
             if (contentResponse.StatusCode == HttpStatusCode.OK)
             {
-                WeatherDataQuery query = new WeatherDataQuery();    
+                WeatherDataQuery query = new WeatherDataQuery();
                 HttpContent content = contentResponse.Content;
                 string data = await content.ReadAsStringAsync();
                 query.CityName = cityName;
@@ -58,6 +51,7 @@ namespace WeatherServiceLibrary
             }
             throw new ApplicationException("unnown error retriving data");
         }
+
         public async Task<WeatherData> GetWeather(string cityName, bool refreshData)
         {
             cityName = cityName.ToLower();
@@ -73,15 +67,17 @@ namespace WeatherServiceLibrary
             }
             return newestItem.WeatherData;
         }
-        public string GetWeatherApiUrl(string cityName)
+
+        private string GetWeatherApiUrl(string cityName)
         {
             string response = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apikey;
             return response;
         }
+
         public IEnumerable<WeatherDataQuery> GetCacheData()
         {
-           var listOfAllElementsInRepo = weatherDataRepository.GetAll();
-                return listOfAllElementsInRepo.AsEnumerable();
+            var listOfAllElementsInRepo = weatherDataRepository.GetAll();
+            return listOfAllElementsInRepo.AsEnumerable();
 
         }
     }

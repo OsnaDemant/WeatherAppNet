@@ -10,22 +10,14 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly ILogger<WeatherForecastController> logger;
+        private readonly IWeatherService cityWeatherService;
 
-
-        private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IConfiguration config;
-        private readonly WeatherService cityWeatherService;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration config)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherService weatherService)
         {
-            _logger = logger;
-            this.config = config;
-            cityWeatherService = new WeatherService();
-            var apiKey = this.config["ApiKey"];
-            cityWeatherService.Initialize(apiKey);
-
+            this.logger = logger;
+            cityWeatherService = weatherService;
         }
-
 
         [HttpGet("{cityName}")]
         public async Task<ActionResult<WeatherData>> GetCurentWeather(string cityName)
@@ -39,12 +31,12 @@ namespace WebApi.Controllers
             }
             catch (UnauthorizedException e)
             {
-                _logger.LogError(e, "user was not authorized");
+                logger.LogError(e, "user was not authorized");
                 return Unauthorized();
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Weather couldnt be downloaded.");
+                logger.LogError(e, "Weather couldnt be downloaded.");
                 return NotFound();
             }
 
@@ -62,7 +54,6 @@ namespace WebApi.Controllers
         [HttpGet("{cityName}/temperature")]
         public async Task<ActionResult<float>> GetTemperature(string cityName, string scaleTemperature, bool refresh)
         {
-
             WeatherData currentWeather;
             // DataBaseFunction.AddData();
             try
@@ -72,12 +63,12 @@ namespace WebApi.Controllers
             }
             catch (UnauthorizedException e)
             {
-                _logger.LogError(e, "user was not authorized");
+                logger.LogError(e, "user was not authorized");
                 return Unauthorized();
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Weather couldnt be downloaded.");
+                logger.LogError(e, "Weather couldnt be downloaded.");
                 return NotFound();
             }
 
@@ -87,7 +78,6 @@ namespace WebApi.Controllers
             }
             else
             {
-
                 var typeOfTemperature = GetTypeScaleForTemperature(scaleTemperature);
                 var curentTemperature = currentWeather.GetTemperature(typeOfTemperature);
                 return Ok(curentTemperature);
@@ -97,9 +87,8 @@ namespace WebApi.Controllers
         public ActionResult<IEnumerable<WeatherDataQuery>> GetCache()
         {
             IEnumerable<WeatherDataQuery> dataCache;
-            WeatherService weatherService = new WeatherService();
 
-            dataCache = weatherService.GetCacheData();
+            dataCache = cityWeatherService.GetCacheData();
 
             if (dataCache == null)
             {
@@ -113,11 +102,10 @@ namespace WebApi.Controllers
         }
         //to do asp.net core mvc read
         //to do null handling
-        static public TemperatureScale GetTypeScaleForTemperature(string temperature)
+        private TemperatureScale GetTypeScaleForTemperature(string temperature)
         {
-            TemperatureScale scaleTemperature = TemperatureScale.Fahrenheit;
-
-            switch (temperature.Substring(0, 1).ToUpper())
+            TemperatureScale scaleTemperature;
+            switch (temperature?.Substring(0, 1).ToUpper())
             {
                 case "F":
                     scaleTemperature = TemperatureScale.Fahrenheit;
@@ -126,14 +114,21 @@ namespace WebApi.Controllers
                 case "C":
                     scaleTemperature = TemperatureScale.Celsius;
                     break;
+
+                default:
+                    scaleTemperature = TemperatureScale.Fahrenheit;
+                    break;
             }
+
             return scaleTemperature;
         }
-        static public string CoverSpaceInCityName(string cityName)
-        {
-            cityName = cityName.Replace(" ", "%20");
 
-            return cityName;
-        }
+        private TemperatureScale Test(string temperature)
+            => temperature?.Substring(0, 1).ToUpper() switch
+            {
+                "F" => TemperatureScale.Fahrenheit,
+                "C" => TemperatureScale.Celsius,
+                _ => TemperatureScale.Fahrenheit
+            };
     }
 }
