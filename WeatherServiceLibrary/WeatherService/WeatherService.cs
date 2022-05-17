@@ -21,19 +21,20 @@ namespace WeatherServiceLibrary
     {
 
         private string apikey;
-        private WeatherDataRepository weatherDataRepository;
+        private IWeatherDataRepository weatherDataRepository;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-
-        public WeatherService(IConfiguration config)
+        public WeatherService(IConfiguration config, IWeatherDataRepository weatherDataRepository, IHttpClientFactory httpClientFactory )
         {
-            this.weatherDataRepository = new WeatherDataRepository();
+            this.weatherDataRepository = weatherDataRepository;
             this.apikey = config["ApiKey"];
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<WeatherDataQuery> RefreshWeather(string cityName)
         {
-            HttpClient client = new();
-            HttpResponseMessage contentResponse = await client.GetAsync(GetWeatherApiUrl(cityName));
+            var httpClient = _httpClientFactory.CreateClient();
+            HttpResponseMessage contentResponse = await httpClient.GetAsync(GetWeatherApiUrl(cityName));
             if (contentResponse.StatusCode == HttpStatusCode.OK)
             {
                 WeatherDataQuery query = new WeatherDataQuery();

@@ -1,4 +1,5 @@
 using WeatherServiceLibrary;
+using WeatherServiceLibrary.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IWeatherService, WeatherService>();
+builder.Services.AddScoped<IWeatherDataRepository, WeatherDataRepository>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
