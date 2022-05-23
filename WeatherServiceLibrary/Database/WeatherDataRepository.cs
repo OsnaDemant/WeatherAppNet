@@ -17,6 +17,7 @@ namespace WeatherServiceLibrary.Database
 
             context = new WeatherContext();
         }
+
         public IQueryable<WeatherDataQuery> GetAll()
         {
             return context.WeatherDataQuerys

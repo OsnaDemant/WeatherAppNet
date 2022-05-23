@@ -46,7 +46,6 @@ namespace WebApi.Controllers
             }
             else
             {
-
                 return Ok(currentWeather);
             }
 

@@ -11,11 +11,13 @@ using WeatherServiceLibrary.Database;
 using WeatherServiceLibrary.Entities;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WeatherAppNet
 {
     class Program
     {
+
         static async Task Main(string[] args)
         {
             ProgramSettings programSettings = ParseArguments(args);
@@ -29,9 +31,16 @@ namespace WeatherAppNet
                 .AddUserSecrets<Program>()
                 .Build();
 
-            var cityWeatherService = new WeatherService(config);
+            var httpClientFactory = new ServiceCollection()
+                  .AddHttpClient()
+                  .BuildServiceProvider()
+                  .GetService<IHttpClientFactory>();
+
+            WeatherDataRepository weatherDataRepository = new WeatherDataRepository();
+
+            var cityWeatherService = new WeatherService(config, weatherDataRepository, httpClientFactory);
             WeatherData currentWeather;
-            // DataBaseFunction.AddData();
+
             try
             {
                 currentWeather = await cityWeatherService.GetWeather(programSettings.CityName, programSettings.Retrive);
@@ -93,6 +102,7 @@ namespace WeatherAppNet
             }
             return null;
         }
+
         static public bool RetriveData(string arg)
         {
             switch (arg.Substring(0, 2).ToUpper())

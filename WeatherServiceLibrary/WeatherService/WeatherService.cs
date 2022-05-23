@@ -79,7 +79,6 @@ namespace WeatherServiceLibrary
         {
             var listOfAllElementsInRepo = weatherDataRepository.GetAll();
             return listOfAllElementsInRepo.AsEnumerable();
-
         }
     }
 }
