@@ -8,3 +8,6 @@ put the city name as the first argument, and optionally as the second argument /
 /C - celsius
 
 /F - Fahrenheit
+
+if you want to refresh the data stored in the database add as third argument /R 
+typical command line:  **"New York" /C /R**
