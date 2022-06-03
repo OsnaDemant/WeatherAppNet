@@ -17,12 +17,42 @@ using WeatherServiceLibrary.Exceptions;
 
 namespace WeatherServiceLibrary
 {
+    public class StringHelper : IStringHelper
+    {
+        public string Reverse(string data) => data.Reverse().Aggregate("", (acc, x) => acc + x);
+    }
+
+    public interface IStringHelper
+    {
+        public string Reverse(string data);
+    }
+
+    public class NewTest
+    {
+        private readonly IStringHelper stringHelper;
+
+        public NewTest(IStringHelper stringHelper)
+        {
+            this.stringHelper = stringHelper;
+        }
+
+        public string GetMyNameReversed(string name)
+        {
+            return stringHelper.Reverse(name);
+        }
+    }
+
+
+
     public class WeatherService : IWeatherService
     {
 
-        private string apikey;
+        public string apikey;
         private IWeatherDataRepository weatherDataRepository;
         private readonly IHttpClientFactory _httpClientFactory;
+
+        
+
 
         public WeatherService(IConfiguration config, IWeatherDataRepository weatherDataRepository, IHttpClientFactory httpClientFactory )
         {
