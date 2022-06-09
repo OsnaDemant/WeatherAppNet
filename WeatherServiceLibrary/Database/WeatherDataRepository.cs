@@ -8,7 +8,6 @@ using WeatherServiceLibrary.Entities;
 
 namespace WeatherServiceLibrary.Database
 {
-    //zrobić z tego servis
     public class WeatherDataRepository : IWeatherDataRepository
     {
         private WeatherContext context;

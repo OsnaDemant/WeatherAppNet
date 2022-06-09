@@ -1,5 +1,6 @@
 using WeatherServiceLibrary;
 using WeatherServiceLibrary.Database;
+using WeatherServiceLibrary.DataDownload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<IWeatherDataRepository, WeatherDataRepository>();
+builder.Services.AddScoped<IDataDownload, DataDownload>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

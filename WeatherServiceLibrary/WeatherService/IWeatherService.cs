@@ -8,6 +8,6 @@ namespace WeatherServiceLibrary
     {
         IEnumerable<WeatherDataQuery> GetCacheData();
         Task<WeatherData> GetWeather(string cityName, bool refreshData);
-        Task<WeatherDataQuery> RefreshWeather(string cityName);
+      
     }
 }

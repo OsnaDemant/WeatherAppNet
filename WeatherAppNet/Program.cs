@@ -12,6 +12,7 @@ using WeatherServiceLibrary.Entities;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WeatherServiceLibrary.DataDownload;
 
 namespace WeatherAppNet
 {
@@ -20,7 +21,7 @@ namespace WeatherAppNet
 
         static async Task Main(string[] args)
         {
-            ProgramSettings programSettings = ParseArguments(args);
+            ProgramSettings programSettings = ParseArguments(args); 
             if (programSettings == null)
             {
                 return;
@@ -36,9 +37,12 @@ namespace WeatherAppNet
                   .BuildServiceProvider()
                   .GetService<IHttpClientFactory>();
 
-            WeatherDataRepository weatherDataRepository = new WeatherDataRepository();
+            
 
-            var cityWeatherService = new WeatherService(config, weatherDataRepository, httpClientFactory);
+            WeatherDataRepository weatherDataRepository = new WeatherDataRepository();
+            DataDownload dataDownload = new DataDownload(config, httpClientFactory);
+
+            var cityWeatherService = new WeatherService(dataDownload,weatherDataRepository);
             WeatherData currentWeather;
 
             try
