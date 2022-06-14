@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WeatherServiceLibrary.Common;
 using WeatherServiceLibrary.Database;
-using WeatherServiceLibrary.DataDownload;
+using WeatherServiceLibrary;
 using WeatherServiceLibrary.Entities;
 using WeatherServiceLibrary.Exceptions;
 

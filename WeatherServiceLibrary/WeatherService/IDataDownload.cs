@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using WeatherServiceLibrary.Entities;
 
-namespace WeatherServiceLibrary.DataDownload
+namespace WeatherServiceLibrary
 {
      public interface IDataDownload
     {

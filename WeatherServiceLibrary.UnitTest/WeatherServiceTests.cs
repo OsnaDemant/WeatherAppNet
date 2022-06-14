@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherServiceLibrary.Database;
-using WeatherServiceLibrary.DataDownload;
+using WeatherServiceLibrary;
 using WeatherServiceLibrary.Entities;
 
 
@@ -19,7 +19,7 @@ public class WeatherServiceTests
 {
 
     [TestMethod]
-    public async Task WeatherServiceTests_CorrectDataInRepository_ServiceReturnsDatabaseData()
+    public async Task WeatherServiceTests_CorrectDataFromServer_DataDownloadReturnsServerData()
     {
         // Arrange
         var CityName = "Szczecin";

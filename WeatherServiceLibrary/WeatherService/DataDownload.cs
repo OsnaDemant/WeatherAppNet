@@ -11,7 +11,7 @@ using WeatherServiceLibrary.Database;
 using WeatherServiceLibrary.Entities;
 using WeatherServiceLibrary.Exceptions;
 
-namespace WeatherServiceLibrary.DataDownload
+namespace WeatherServiceLibrary
 {
     public class DataDownload : IDataDownload
     {
@@ -26,7 +26,7 @@ namespace WeatherServiceLibrary.DataDownload
 
         public async Task<WeatherDataQuery> RefreshWeather(string cityName)
         {
-            var httpClient = _httpClientFactory.CreateClient();
+            var httpClient = _httpClientFactory.CreateClient(string.Empty);
             HttpResponseMessage contentResponse = await httpClient.GetAsync(GetWeatherApiUrl(cityName));
             if (contentResponse.StatusCode == HttpStatusCode.OK)
             {
@@ -34,7 +34,7 @@ namespace WeatherServiceLibrary.DataDownload
                 HttpContent content = contentResponse.Content;
                 string data = await content.ReadAsStringAsync();
                 query.CityName = cityName;
-                query.Time = DateTime.Now;
+                query.Time = DateTime.UtcNow;
                 query.WeatherData = JsonConvert.DeserializeObject<WeatherData>(data);
                 return query;
             }
