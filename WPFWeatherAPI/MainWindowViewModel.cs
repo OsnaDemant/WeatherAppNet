@@ -10,6 +10,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         get => _cityName;
         set {
             _cityName = value;
+            GetWeatherCommand?.RaiseCanExecuteChanged();
             OnPropertyChanged(nameof(CityName));
         }
     }
@@ -22,7 +23,15 @@ public class MainWindowViewModel : INotifyPropertyChanged
         {
             MessageBox.Show($"Wybrano: {CityName}");
         };
-        GetWeatherCommand = new MyCommand(action);
+        var func = () =>
+        {
+        
+            if (CityName != string.Empty) { return true; }
+            return false;
+            
+        };
+        
+        GetWeatherCommand = new MyCommand(action,func);
     }
 
 

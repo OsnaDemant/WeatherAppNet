@@ -10,22 +10,35 @@ namespace WPFWeatherAPI
     public class MyCommand : ICommand
     {
         private readonly Action execute;
+        private readonly Func<bool> canExecute;
 
-        public MyCommand(Action execute)
+        public MyCommand(Action execute,Func<bool> canExecute)
         {
             this.execute = execute;
+            this.canExecute = canExecute;
+
         }
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return canExecute.Invoke();
+          
         }
         public void Execute(object parameter)
         {
             execute?.Invoke();
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
     }
 }
 
