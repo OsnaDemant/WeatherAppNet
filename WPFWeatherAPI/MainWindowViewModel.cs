@@ -16,6 +16,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     }
 
     public MyCommand GetWeatherCommand { get; set; }
+    public My
 
     public MainWindowViewModel()
     {
