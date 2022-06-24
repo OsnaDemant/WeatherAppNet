@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace WPFWeatherAPI
 {
     public class MyCommand : ICommand
     {
-        private readonly Action execute;
+        private readonly Func<Task> execute;
         private readonly Func<bool> canExecute;
 
-        public MyCommand(Action execute,Func<bool> canExecute)
+        public MyCommand(Func<Task> execute,Func<bool> canExecute)
         {
             this.execute = execute;
             this.canExecute = canExecute;
@@ -24,9 +25,16 @@ namespace WPFWeatherAPI
             return canExecute.Invoke();
           
         }
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            execute?.Invoke();
+            try
+            {
+                if(execute is not null)
+                    await execute();
+            }
+            catch(Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public event EventHandler CanExecuteChanged

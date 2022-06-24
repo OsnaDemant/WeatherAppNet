@@ -21,8 +21,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
         <TextBox Text="{Binding CityName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="10" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
-        <ComboBox HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Grid.Row="1" Margin="10"/>
+        <ComboBox Text=" Scale"  HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Grid.Row="1" Margin="10" ItemsSource="{Binding Path=TemperatureScalesList}" SelectedValue="{Binding Path=SelectedTemperatureScale, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="Refresh" IsChecked="{Binding RefreshCheckBoxIsChecked}" HorizontalAlignment="Left" Margin="10" Grid.Row="2" VerticalAlignment="Top"/>
         <Button Command="{Binding GetWeatherCommand}" Content="Button" HorizontalAlignment="Left"  VerticalAlignment="Top" Grid.Row="3" Height="28" Width="110" Margin="10"/>
        
