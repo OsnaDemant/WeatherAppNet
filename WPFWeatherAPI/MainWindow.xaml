@@ -11,20 +11,19 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" MinHeight="40" />
+            <RowDefinition Height="*" MinHeight="40"/>
+            <RowDefinition Height="*" MinHeight="40"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-
         </Grid.ColumnDefinitions>
 
-        <TextBox Text="{Binding CityName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="10" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
-        <ComboBox Text=" Scale"  HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Grid.Row="1" Margin="10" ItemsSource="{Binding Path=TemperatureScalesList}" SelectedValue="{Binding Path=SelectedTemperatureScale, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Content="Refresh" IsChecked="{Binding RefreshCheckBoxIsChecked}" HorizontalAlignment="Left" Margin="10" Grid.Row="2" VerticalAlignment="Top"/>
-        <Button Command="{Binding GetWeatherCommand}" Content="Button" HorizontalAlignment="Left"  VerticalAlignment="Top" Grid.Row="3" Height="28" Width="120" Margin="40"/>
+        <TextBox Text="{Binding CityName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="10" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <ComboBox Text=" Scale"  HorizontalAlignment="Center"  VerticalAlignment="Top" Width="120" Grid.Row="1" Margin="10" ItemsSource="{Binding Path=TemperatureScalesList}" SelectedValue="{Binding Path=SelectedTemperatureScale, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Content="Refresh" IsChecked="{Binding RefreshCheckBoxIsChecked}" HorizontalAlignment="Center" Margin="10" Grid.Row="2" VerticalAlignment="Top"/>
+        <Button Command="{Binding GetWeatherCommand}" Content="Button" HorizontalAlignment="Center"  VerticalAlignment="Top" Grid.Row="3" Height="28" Width="120" Margin="10"/>
 
 
 
