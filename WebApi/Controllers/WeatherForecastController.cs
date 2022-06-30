@@ -125,13 +125,5 @@ namespace WebApi.Controllers
 
             return scaleTemperature;
         }
-
-        private TemperatureScale Test(string temperature)
-            => temperature?.Substring(0, 1).ToUpper() switch
-            {
-                "F" => TemperatureScale.Kelvin,
-                "C" => TemperatureScale.Celsius,
-                _ => TemperatureScale.Kelvin
-            };
     }
 }
