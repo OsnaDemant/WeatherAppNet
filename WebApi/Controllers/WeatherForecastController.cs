@@ -107,7 +107,7 @@ namespace WebApi.Controllers
             switch (temperature?.Substring(0, 1).ToUpper())
             {
                 case "F":
-                    scaleTemperature = TemperatureScale.Fahrenheit;
+                    scaleTemperature = TemperatureScale.Kelvin;
                     break;
 
                 case "C":
@@ -115,7 +115,7 @@ namespace WebApi.Controllers
                     break;
 
                 default:
-                    scaleTemperature = TemperatureScale.Fahrenheit;
+                    scaleTemperature = TemperatureScale.Kelvin;
                     break;
             }
 
@@ -125,9 +125,9 @@ namespace WebApi.Controllers
         private TemperatureScale Test(string temperature)
             => temperature?.Substring(0, 1).ToUpper() switch
             {
-                "F" => TemperatureScale.Fahrenheit,
+                "F" => TemperatureScale.Kelvin,
                 "C" => TemperatureScale.Celsius,
-                _ => TemperatureScale.Fahrenheit
+                _ => TemperatureScale.Kelvin
             };
     }
 }

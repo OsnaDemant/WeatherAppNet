@@ -13,7 +13,7 @@ namespace WeatherAppNet
         public TemperatureScale TemperatureScaleType { get; private set; }
         public bool Retrive { get; private set; }
 
-        public ProgramSettings(string cityName, TemperatureScale temperatureScale = TemperatureScale.Fahrenheit, bool retrive = false)
+        public ProgramSettings(string cityName, TemperatureScale temperatureScale = TemperatureScale.Kelvin, bool retrive = false)
         {
             this.CityName = cityName;
             this.TemperatureScaleType = temperatureScale;

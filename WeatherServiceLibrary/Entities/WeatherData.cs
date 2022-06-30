@@ -18,7 +18,7 @@ public class WeatherData
         return temperatureTypeScale switch
         {
             TemperatureScale.Celsius => WeatherHelper.KelvinToCelsius(Main.Temp),
-            TemperatureScale.Fahrenheit => Main.Temp,
+            TemperatureScale.Kelvin => Main.Temp,
             _ => throw new NotImplementedException("Invalid Temperature Scale"),
         };
     }

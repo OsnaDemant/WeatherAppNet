@@ -69,12 +69,12 @@ namespace WeatherAppNet
 
         static public TemperatureScale GetTypeScaleForTemperature(string arg)
         {
-            TemperatureScale scaleTemperature = TemperatureScale.Fahrenheit;
+            TemperatureScale scaleTemperature = TemperatureScale.Kelvin;
 
             switch (arg.Substring(0, 2).ToUpper())
             {
                 case "/F":
-                    scaleTemperature = TemperatureScale.Fahrenheit;
+                    scaleTemperature = TemperatureScale.Kelvin;
                     break;
 
                 case "/C":

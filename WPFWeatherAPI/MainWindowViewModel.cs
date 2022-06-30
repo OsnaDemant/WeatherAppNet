@@ -42,7 +42,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public ObservableCollection<TemperatureScale> TemperatureScalesList => new()
     {
         TemperatureScale.Celsius,
-        TemperatureScale.Fahrenheit,
+        TemperatureScale.Kelvin,
     };
 
     private TemperatureScale _selectedTemperatureScale;
