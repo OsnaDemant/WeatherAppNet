@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         {
 
             WeatherData currentWeather;
-            // DataBaseFunction.AddData();
+      
             try
             {
                 currentWeather = await cityWeatherService.GetWeather(cityName, false);
@@ -54,7 +54,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<float>> GetTemperature(string cityName, string scaleTemperature, bool refresh)
         {
             WeatherData currentWeather;
-            // DataBaseFunction.AddData();
+           
             try
             {
 
@@ -99,8 +99,7 @@ namespace WebApi.Controllers
             }
 
         }
-        //to do asp.net core mvc read
-        //to do null handling
+       
         private TemperatureScale GetTypeScaleForTemperature(string temperature)
         {
             TemperatureScale scaleTemperature;
