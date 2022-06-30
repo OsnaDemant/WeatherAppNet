@@ -73,12 +73,16 @@ namespace WeatherAppNet
 
             switch (arg.Substring(0, 2).ToUpper())
             {
-                case "/F":
+                case "/K":
                     scaleTemperature = TemperatureScale.Kelvin;
                     break;
 
                 case "/C":
                     scaleTemperature = TemperatureScale.Celsius;
+                    break;
+
+                case "/F":
+                    scaleTemperature = TemperatureScale.Fahrenheit;
                     break;
             }
             return scaleTemperature;

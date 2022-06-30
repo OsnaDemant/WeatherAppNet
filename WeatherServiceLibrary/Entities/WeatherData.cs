@@ -19,6 +19,7 @@ public class WeatherData
         {
             TemperatureScale.Celsius => WeatherHelper.KelvinToCelsius(Main.Temp),
             TemperatureScale.Kelvin => Main.Temp,
+            TemperatureScale.Fahrenheit => WeatherHelper.KelvinToFahrenheit(Main.Temp),
             _ => throw new NotImplementedException("Invalid Temperature Scale"),
         };
     }

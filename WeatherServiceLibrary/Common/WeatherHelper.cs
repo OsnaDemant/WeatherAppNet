@@ -13,5 +13,10 @@ namespace WeatherServiceLibrary.Common
             float celsius = (float)(kelvin - 273.15);
             return celsius;
         }
+        public static float KelvinToFahrenheit(float kelvin)
+        {
+            float fahrenheit = (float)(kelvin * 9 / 5 - 459.67);
+            return fahrenheit;
+        }
     }
 }

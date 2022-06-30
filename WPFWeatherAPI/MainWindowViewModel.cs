@@ -43,6 +43,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     {
         TemperatureScale.Celsius,
         TemperatureScale.Kelvin,
+        TemperatureScale.Fahrenheit,
     };
 
     private TemperatureScale _selectedTemperatureScale;

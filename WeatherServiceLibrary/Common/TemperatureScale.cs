@@ -1,4 +1,4 @@
 ﻿namespace WeatherServiceLibrary.Common
 {
-    public enum TemperatureScale { Celsius, Kelvin }
+    public enum TemperatureScale { Celsius, Kelvin, Fahrenheit }
 }
